@@ -6,5 +6,6 @@
  *
  */
 module DisputeFBS {
-	requires java.xml;
+	requires pdfbox.app;
+	
 }
