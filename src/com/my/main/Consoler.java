@@ -30,6 +30,10 @@ public class Consoler {
 
 		String s = sb.toString();
 
+		if (!s.contains("[")) {
+			return "";
+		}
+		
 		return s.substring(s.indexOf("[") + 1, s.indexOf("]")).trim();
 	}
 

@@ -6,4 +6,5 @@
  *
  */
 module DisputeFBS {
+	requires java.xml;
 }
