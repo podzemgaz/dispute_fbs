@@ -1,0 +1,68 @@
+package com.my.main;
+
+import java.util.Date;
+
+public class Posting {
+	private String code;
+	private float sum;
+	private Date date;
+	private Status status;
+	private int numAct;
+	private int numMistch;
+	private String warehouse;
+	
+	public Posting () {
+		this.status = Status.ARBITRAGE;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public void setSum(float sum) {
+		this.sum = sum;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+
+	public void setNumAct(int numAct) {
+		this.numAct = numAct;
+	}
+
+	public void setNumMistch(int numMistch) {
+		this.numMistch = numMistch;
+	}
+
+	public void setWarehouse(String warehouse) {
+		this.warehouse = warehouse;
+	}
+
+	@Override
+	public String toString() {
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("Номер отправления: ").append(code).append(System.lineSeparator()).append("Сумма отправления: ")
+				.append(sum).append(System.lineSeparator()).append("Дата отправления: ").append(date)
+				.append(System.lineSeparator()).append("Статус: ").append(status.getName())
+				.append(System.lineSeparator()).append("Номер в акте: ");
+
+		if (numAct != 0) {
+			sb.append(numAct);
+		}
+
+		sb.append(System.lineSeparator()).append("Номер в акте о расхождениях: ");
+
+		if (numMistch != 0) {
+			sb.append(numMistch);
+		}
+
+		sb.append(System.lineSeparator()).append("Склад: ").append(warehouse);
+		return sb.toString();
+	}
+}
