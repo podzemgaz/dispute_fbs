@@ -10,16 +10,13 @@ import org.apache.pdfbox.util.PDFTextStripper;
 
 public class PDFWorker {
 
-	public String pdfToString(String path) {
+	public String pdfToString(String path) throws FileNotFoundException {
 		String result = null;
 		File file = new File(path);
 		FileInputStream fis = null;
-		try {
-			fis = new FileInputStream(file);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+		fis = new FileInputStream(file);
+
 		PDDocument pdfDoc = null;
 		try {
 			pdfDoc = PDDocument.load(fis);
