@@ -1,7 +1,8 @@
 package com.my.main;
 
 import java.io.FileNotFoundException;
-import java.util.Arrays;
+import java.util.Map;
+
 
 import com.my.main.exception.TextParseEcxeption;
 
@@ -10,47 +11,64 @@ public class MainConsole {
 		System.out.println("Welcome!");
 
 		Consoler cslr = new Consoler();
+
+		System.out.println("Enter dispute");
+
+		String dispute = cslr.getTextWithinBrackets();
+
+		DisputeTextParser dtp = new DisputeTextParser();
+
+		String[][] values = null;
+		
+		try {
+			values = dtp.getPostingValues(dispute);
+		} catch (TextParseEcxeption e) { // TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		PDFTextParser pdftp = new PDFTextParser();
 
 		while (pdftp.getAccept() == null || pdftp.getMismatch() == null) {
-			
+
 			System.out.println("Enter path");
 			String path = cslr.getLine();
-			
+
 			try {
-				pdftp.testParse(path);				
+				pdftp.testParse(path);
 			} catch (FileNotFoundException e) {
 				System.err.println("Неверно указан путь к файлу");
 			}
 		}
 		
-		System.out.println(pdftp.getWarehouse());
-
-		System.out.println(pdftp.getAccept());
 		
-		System.out.println(pdftp.getMismatch());
+		Map<String, Integer> acceptCodeNum = pdftp.getAccept().getCodeNum();
+		Map<String, Integer> mismatchCodeNum = pdftp.getMismatch().getCodeNum();
+		String warehouse = pdftp.getWarehouse();
 		
+		if (warehouse == null || warehouse.isEmpty()) {
+			System.out.println("Enter warehouse");
+			warehouse = cslr.getLine();
+		}
+
+		Posting[] postings = new Posting[values.length];
+		Posting p;
+		String code;
 		
-//		System.out.println(pdfContent);
-
-		/*
-		 * String dispute = cslr.getTextWithinBrackets();
-		 * 
-		 * TextParser tp = new TextParser();
-		 * 
-		 * String[][] values = null; try { values = tp.getPostingValues(dispute); }
-		 * catch (TextParseEcxeption e) { // TODO Auto-generated catch block
-		 * e.printStackTrace(); }
-		 * 
-		 * for (int i = 0; i < values.length; i++) {
-		 * System.out.println(Arrays.toString(values[i]) + "\n"); }
-		 */
-
-		/*
-		 * String clean = tp.cleanDisputeText(dispute);
-		 * 
-		 * System.out.println(clean);
-		 */
+		for (int i = 0; i < postings.length; i++) {
+			p = new Posting();
+			code = values[i][0];
+			p.setCode(code);
+			p.setSum(values[i][1]);
+			p.setDate(values[i][2]);
+			p.setNumAct(acceptCodeNum.get(code));
+			p.setNumMistch(mismatchCodeNum.get(code));
+			p.setWarehouse(warehouse);
+			postings[i] = p;
+		}
+		
+		for (int i = 0; i < postings.length; i++) {
+			System.out.println(postings[i] + "\n");
+		}
 
 		cslr.close();
 	}

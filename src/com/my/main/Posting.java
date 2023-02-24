@@ -4,8 +4,8 @@ import java.util.Date;
 
 public class Posting {
 	private String code;
-	private float sum;
-	private Date date;
+	private String sum;
+	private String date;
 	private Status status;
 	private int numAct;
 	private int numMistch;
@@ -19,11 +19,11 @@ public class Posting {
 		this.code = code;
 	}
 
-	public void setSum(float sum) {
+	public void setSum(String sum) {
 		this.sum = sum;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 
