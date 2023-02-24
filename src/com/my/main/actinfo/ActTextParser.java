@@ -1,4 +1,4 @@
-package com.my.main;
+package com.my.main.actinfo;
 
 import java.io.FileNotFoundException;
 import java.util.HashMap;
@@ -7,21 +7,23 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PDFTextParser {
+import com.my.main.PDFWorker;
 
-	private Act accept;
-	private Act mismatch;
+public class ActTextParser {
+
+	private ActInfo accept;
+	private ActInfo mismatch;
 	private String warehouse;
 
 	public void setWarehouse(String warehouse) {
 		this.warehouse = warehouse;
 	}
 
-	public Act getAccept() {
+	public ActInfo getAccept() {
 		return accept;
 	}
 
-	public Act getMismatch() {
+	public ActInfo getMismatch() {
 		return mismatch;
 	}
 
@@ -29,24 +31,18 @@ public class PDFTextParser {
 		return warehouse;
 	}
 
-	public void testParse(String path) throws FileNotFoundException {
-
-		PDFWorker pw = new PDFWorker();
-		String textAct = pw.pdfToString(path);
+	public ActInfo testParse(String textAct) throws FileNotFoundException {
 
 		String lowText = textAct.toLowerCase();
 
-		Act act;
+		ActInfo act;
 
 		if (lowText.contains("акт приема-передачи")) {
-			System.out.println("Акт приёма-передачи: " + path);
-			act = new ActAccept();
+			act = new ActInfoAccept();
 		} else if (lowText.contains("акты о расхождениях")) {
-			System.out.println("Акт о расхождениях: " + path);
-			act = new ActMismatch();
+			act = new ActInfoMismatch();
 		} else {
-			System.out.println("Некорректный акт");
-			return;
+			return null;
 		}
 
 		if (warehouse == null || warehouse.isEmpty()) {
@@ -70,11 +66,13 @@ public class PDFTextParser {
 
 		act.setCodeNum(codeNum);
 
-		if (act.getClass().getSimpleName().equals("ActAccept")) {
+		if (act.getClass().getSimpleName().equals("ActInfoAccept")) {
 			accept = act;
 		} else {
 			mismatch = act;
 		}
+		
+		return act;
 	}
 
 	public String getWarehouseFromAct(String actText) {

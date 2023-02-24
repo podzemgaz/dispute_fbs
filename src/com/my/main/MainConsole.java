@@ -3,7 +3,8 @@ package com.my.main;
 import java.io.FileNotFoundException;
 import java.util.Map;
 
-
+import com.my.main.actinfo.ActInfo;
+import com.my.main.actinfo.ActTextParser;
 import com.my.main.exception.TextParseEcxeption;
 
 public class MainConsole {
@@ -17,33 +18,48 @@ public class MainConsole {
 		String dispute = cslr.getTextWithinBrackets();
 
 		DisputeTextParser dtp = new DisputeTextParser();
+		
+		ActTextParser acttp = new ActTextParser();
 
 		String[][] values = null;
 		
 		try {
 			values = dtp.getPostingValues(dispute);
-		} catch (TextParseEcxeption e) { // TODO Auto-generated catch block
+		} catch (TextParseEcxeption e) { 
 			e.printStackTrace();
 		}
+		
 
-		PDFTextParser pdftp = new PDFTextParser();
-
-		while (pdftp.getAccept() == null || pdftp.getMismatch() == null) {
+		while (acttp.getAccept() == null || acttp.getMismatch() == null) {
 
 			System.out.println("Enter path");
 			String path = cslr.getLine();
-
+			
+			PDFWorker pw = new PDFWorker();
+			
 			try {
-				pdftp.testParse(path);
-			} catch (FileNotFoundException e) {
+				String textAct = pw.pdfToString(path);
+				ActInfo actInfo = acttp.testParse(textAct);
+				
+				if (actInfo == null) {
+					System.err.println("Некорректный файл");
+				} else if (actInfo.getClass().getSimpleName().equals("ActInfoAccept")) {
+					System.out.println("Акт приёма-передачи: " + path);
+					
+				} else {
+					System.out.println("Акт о расхождениях: " + path);
+				}
+				
+			} catch (FileNotFoundException e1) {
 				System.err.println("Неверно указан путь к файлу");
 			}
+
 		}
 		
+		Map<String, Integer> acceptCodeNum = acttp.getAccept().getCodeNum();
+		Map<String, Integer> mismatchCodeNum = acttp.getMismatch().getCodeNum();
 		
-		Map<String, Integer> acceptCodeNum = pdftp.getAccept().getCodeNum();
-		Map<String, Integer> mismatchCodeNum = pdftp.getMismatch().getCodeNum();
-		String warehouse = pdftp.getWarehouse();
+		String warehouse = acttp.getWarehouse();
 		
 		if (warehouse == null || warehouse.isEmpty()) {
 			System.out.println("Enter warehouse");
@@ -66,8 +82,20 @@ public class MainConsole {
 			postings[i] = p;
 		}
 		
+		StringBuilder sb = new StringBuilder();
+		
 		for (int i = 0; i < postings.length; i++) {
-			System.out.println(postings[i] + "\n");
+			sb.append(postings[i]).append(System.lineSeparator()).append(System.lineSeparator());
+		}
+		
+		for (int i = 0; i < sb.length(); i++) {
+			System.out.print(sb.charAt(i));
+			try {
+				Thread.sleep(6);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		cslr.close();

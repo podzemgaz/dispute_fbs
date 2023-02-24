@@ -1,8 +1,8 @@
-package com.my.main;
+package com.my.main.actinfo;
 
 import java.util.Map;
 
-public abstract class Act {
+public abstract class ActInfo {
 	private Map<String, Integer> codeNum;
 
 	public Map<String, Integer> getCodeNum() {
