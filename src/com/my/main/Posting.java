@@ -65,4 +65,12 @@ public class Posting {
 		sb.append(System.lineSeparator()).append("Склад: ").append(warehouse);
 		return sb.toString();
 	}
+	
+	public void setDeliveries(String deliveries, Posting[] postings) {
+		for (int i = 0; i < postings.length; i++) {
+			if (deliveries.contains(postings[i].code)) {
+				postings[i].status = Status.DELIVERED;			}
+		}
+	}
+	
 }

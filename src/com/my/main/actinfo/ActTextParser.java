@@ -95,6 +95,6 @@ public class ActTextParser {
 	
 	public void print() {
 		cnslr.printLnLB("Путь к файлу: " + path);
-		cnslr.printLnLB("Тип акта: " + type);
+		cnslr.printLnLB("Тип акта: " + type.getName());
 	}
 }

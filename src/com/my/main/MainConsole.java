@@ -7,7 +7,7 @@ import com.my.main.actinfo.ActType;
 import com.my.main.exception.TextParseEcxeption;
 
 public class MainConsole {
-	public static void main(String[] args) {
+	public Posting[] getPostingsByConsole() {
 		System.out.println("Welcome!");
 
 		Consoler cnsler = new Consoler();
@@ -33,7 +33,7 @@ public class MainConsole {
 		// check number codes
 		while (expert.getCodeNumAccepted() == null || expert.getCodeNumMismatch() == null) {
 
-			System.out.println("Enter path");
+			System.out.println("Enter path:");
 			String path = cnsler.getLine();
 			// check path
 			if (!path.endsWith(".pdf")) {
@@ -71,12 +71,8 @@ public class MainConsole {
 
 		Posting[] postings = expert.getPostings();
 
-		cnsler.printLikeBoss(System.lineSeparator());
-
-		for (int i = 0; i < postings.length; i++) {
-			cnsler.printLnLB(postings[i].toString() + "\n");
-		}
-
 		cnsler.close();
+		
+		return postings;
 	}
 }

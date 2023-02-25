@@ -2,7 +2,7 @@ package com.my.main;
 
 public enum Status {
 
-	ARBITRAGE("арбитраж"), BEING_DELIVERED("доставляется");
+	ARBITRAGE("арбитраж"), DELIVERED("доставляется");
 
 	private final String name;
 
