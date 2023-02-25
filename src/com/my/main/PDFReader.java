@@ -9,6 +9,28 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
 
 public class PDFReader {
+	private Consoler cnsler;
+
+	public PDFReader(Consoler cnsler) {
+		this.cnsler = cnsler;
+	}
+
+	public boolean checkPath(String path) {
+
+		if (!path.endsWith(".pdf")) {
+			cnsler.printErrLikeBoss("Неверный формат файла, должен быть pdf");
+			return false;
+		}
+
+		File file = new File(path);
+
+		if (!file.exists()) {
+			cnsler.printErrLikeBoss("Файла не существует");
+			return false;
+		}
+
+		return true;
+	}
 
 	public String pdfToString(String path) throws FileNotFoundException {
 		String result = null;

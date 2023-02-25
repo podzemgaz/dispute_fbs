@@ -1,5 +1,6 @@
 package com.my.main;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Map;
 
@@ -10,25 +11,33 @@ import com.my.main.exception.TextParseEcxeption;
 public class MainConsole {
 	public static void main(String[] args) {
 		System.out.println("Welcome!");
+		
+		Expert expert = new Expert();
 
-		Consoler cosler = new Consoler();
-		String dispute = cosler.getTextWithinBrackets();
-		PDFReader pdfReader = new PDFReader();
+		Consoler cnsler = new Consoler();
+		PDFReader pdfReader = new PDFReader(cnsler);
 		DisputeTextParser dtp = new DisputeTextParser();
 		ActTextParser acttp = new ActTextParser();
-
-		System.out.println("Enter dispute");
-
-		try {
-			dtp.parse(dispute);
-		} catch (TextParseEcxeption e) {
-			e.printStackTrace();
+		
+		while (expert.getValues() == null) {
+			System.out.println("Enter dispute");
+			String dispute = cnsler.getTextWithinBrackets();
+			try {
+				dtp.parse(dispute);
+			} catch (TextParseEcxeption e) {
+				e.printStackTrace();
+			}
+			expert.setValues(dtp.getValues());
 		}
 
 		while (acttp.getAccept() == null || acttp.getMismatch() == null) {
 
 			System.out.println("Enter path");
-			String path = cosler.getLine();
+			String path = cnsler.getLine();
+			// check path
+			if (!pdfReader.checkPath(path)) {
+				continue;
+			}
 
 			try {
 				String textAct = pdfReader.pdfToString(path);
@@ -56,7 +65,7 @@ public class MainConsole {
 
 		if (warehouse == null || warehouse.isEmpty()) {
 			System.out.println("Enter warehouse");
-			warehouse = cosler.getLine();
+			warehouse = cnsler.getLine();
 		}
 
 		String[][] values = dtp.getValues();
@@ -92,6 +101,6 @@ public class MainConsole {
 			}
 		}
 
-		cosler.close();
+		cnsler.close();
 	}
 }
