@@ -1,5 +1,6 @@
 package com.my.main.actinfo;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -7,49 +8,60 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.my.main.Consoler;
 import com.my.main.PDFReader;
 
 public class ActTextParser {
 
-	private ActInfo accept;
-	private ActInfo mismatch;
+	private Consoler cnslr;
+	private String path;
 	private String warehouse;
+	private ActType type;
+	private Map<String, Integer> codeNum;
+
+	public ActTextParser(Consoler cnslr) {
+		this.cnslr = cnslr;
+	}
 
 	public void setWarehouse(String warehouse) {
 		this.warehouse = warehouse;
 	}
 
-	public ActInfo getAccept() {
-		return accept;
-	}
-
-	public ActInfo getMismatch() {
-		return mismatch;
-	}
-
 	public String getWarehouse() {
 		return warehouse;
 	}
+	
+	
+	public Map<String, Integer> getCodeNum() {
+		return codeNum;
+	}
+	
+	public ActType getActType() {
+		return type;
+	}
 
-	public ActInfo testParse(String textAct) throws FileNotFoundException {
+	public void testParse(File pdfFile) throws FileNotFoundException {
+		
+		path = pdfFile.getAbsolutePath();
+
+		PDFReader reader = new PDFReader(cnslr);
+
+		String textAct = reader.pdfToString(pdfFile);
 
 		String lowText = textAct.toLowerCase();
-
-		ActInfo act;
-
 		if (lowText.contains("акт приема-передачи")) {
-			act = new ActInfoAccept();
+			type = ActType.ACCEPT;
 		} else if (lowText.contains("акты о расхождениях")) {
-			act = new ActInfoMismatch();
+			type = ActType.MISMATCH;
 		} else {
-			return null;
+			return;
 		}
 
 		if (warehouse == null || warehouse.isEmpty()) {
 			warehouse = getWarehouseFromAct(textAct);
 		}
 
-		Map<String, Integer> codeNum = new HashMap<>();
+		codeNum = new HashMap<>();
 		Pattern p = Pattern.compile("\\d+ (.*)?\\d+-\\d+-\\d");
 		Matcher m = p.matcher(textAct);
 
@@ -64,15 +76,6 @@ public class ActTextParser {
 			codeNum.put(split[1], Integer.parseInt(split[0]));
 		}
 
-		act.setCodeNum(codeNum);
-
-		if (act.getClass().getSimpleName().equals("ActInfoAccept")) {
-			accept = act;
-		} else {
-			mismatch = act;
-		}
-		
-		return act;
 	}
 
 	public String getWarehouseFromAct(String actText) {
@@ -88,5 +91,10 @@ public class ActTextParser {
 		result = result.replaceAll("\r?\n", "");
 
 		return result;
+	}
+	
+	public void print() {
+		cnslr.printLnLB("Путь к файлу: " + path);
+		cnslr.printLnLB("Тип акта: " + type);
 	}
 }

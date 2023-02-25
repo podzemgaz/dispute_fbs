@@ -45,7 +45,7 @@ public class Consoler {
 		for (int i = 0; i < s.length(); i++) {
 			System.out.print(s.charAt(i));
 			try {
-				Thread.sleep(6);
+				Thread.sleep(5);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -61,7 +61,7 @@ public class Consoler {
 		for (int i = 0; i < s.length(); i++) {
 			System.err.print(s.charAt(i));
 			try {
-				Thread.sleep(6);
+				Thread.sleep(5);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

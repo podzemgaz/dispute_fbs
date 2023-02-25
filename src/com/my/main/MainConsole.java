@@ -4,21 +4,22 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Map;
 
-import com.my.main.actinfo.ActInfo;
 import com.my.main.actinfo.ActTextParser;
+import com.my.main.actinfo.ActType;
 import com.my.main.exception.TextParseEcxeption;
 
 public class MainConsole {
 	public static void main(String[] args) {
 		System.out.println("Welcome!");
-		
-		Expert expert = new Expert();
 
 		Consoler cnsler = new Consoler();
-		PDFReader pdfReader = new PDFReader(cnsler);
+
+		Expert expert = new Expert();
 		DisputeTextParser dtp = new DisputeTextParser();
-		ActTextParser acttp = new ActTextParser();
-		
+		ActTextParser acttp = new ActTextParser(cnsler);
+
+		File pdfFile;
+
 		while (expert.getValues() == null) {
 			System.out.println("Enter dispute");
 			String dispute = cnsler.getTextWithinBrackets();
@@ -30,45 +31,52 @@ public class MainConsole {
 			expert.setValues(dtp.getValues());
 		}
 
-		while (acttp.getAccept() == null || acttp.getMismatch() == null) {
+		while (expert.getCodeNumAccepted() == null || expert.getCodeNumMismatch() == null) {
 
 			System.out.println("Enter path");
 			String path = cnsler.getLine();
 			// check path
-			if (!pdfReader.checkPath(path)) {
+			if (!path.endsWith(".pdf")) {
+				cnsler.printLnErrLB("Неверный формат файла, должен быть pdf");
 				continue;
 			}
 
+			pdfFile = new File(path);
+
 			try {
-				String textAct = pdfReader.pdfToString(path);
-				ActInfo actInfo = acttp.testParse(textAct);
-
-				if (actInfo == null) {
-					System.err.println("Некорректный файл");
-				} else if (actInfo.getClass().getSimpleName().equals("ActInfoAccept")) {
-					System.out.println("Акт приёма-передачи: " + path);
-
-				} else {
-					System.out.println("Акт о расхождениях: " + path);
-				}
-
-			} catch (FileNotFoundException e1) {
-				System.err.println("Неверно указан путь к файлу");
+				acttp.testParse(pdfFile);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
 			}
 
+			if (acttp.getActType() == ActType.ACCEPT) {
+				expert.setCodeNumAccepted(acttp.getCodeNum());
+			} else if (acttp.getActType() == ActType.MISMATCH) {
+				expert.setCodeNumMismatch(acttp.getCodeNum());
+			} else {
+				continue;
+			}
+
+			acttp.print();
+
 		}
-
-		Map<String, Integer> acceptCodeNum = acttp.getAccept().getCodeNum();
-		Map<String, Integer> mismatchCodeNum = acttp.getMismatch().getCodeNum();
-
-		String warehouse = acttp.getWarehouse();
+		
+		expert.setWarehouse(acttp.getWarehouse());
+		
+		//=======================================
+		
+		String[][] values = expert.getValues();
+		Map<String, Integer> acceptCodeNum = expert.getCodeNumAccepted();
+		Map<String, Integer> mismatchCodeNum = expert.getCodeNumMismatch();
+		String warehouse = expert.getWarehouse();
 
 		if (warehouse == null || warehouse.isEmpty()) {
 			System.out.println("Enter warehouse");
 			warehouse = cnsler.getLine();
+			expert.setWarehouse(warehouse);
 		}
 
-		String[][] values = dtp.getValues();
+		
 		Posting[] postings = new Posting[values.length];
 		Posting p;
 		String code;
@@ -85,20 +93,10 @@ public class MainConsole {
 			postings[i] = p;
 		}
 
-		StringBuilder sb = new StringBuilder();
+		cnsler.printLikeBoss(System.lineSeparator());
 
 		for (int i = 0; i < postings.length; i++) {
-			sb.append(postings[i]).append(System.lineSeparator()).append(System.lineSeparator());
-		}
-
-		for (int i = 0; i < sb.length(); i++) {
-			System.out.print(sb.charAt(i));
-			try {
-				Thread.sleep(6);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			cnsler.printLnLB(postings[i].toString() + "\n");
 		}
 
 		cnsler.close();

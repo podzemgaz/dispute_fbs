@@ -4,9 +4,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Map;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
+
+import com.my.main.actinfo.ActTextParser;
 
 public class PDFReader {
 	private Consoler cnsler;
@@ -18,23 +21,23 @@ public class PDFReader {
 	public boolean checkPath(String path) {
 
 		if (!path.endsWith(".pdf")) {
-			cnsler.printErrLikeBoss("Неверный формат файла, должен быть pdf");
+			cnsler.printLnErrLB("Неверный формат файла, должен быть pdf");
 			return false;
 		}
 
 		File file = new File(path);
 
 		if (!file.exists()) {
-			cnsler.printErrLikeBoss("Файла не существует");
+			cnsler.printLnErrLB("Файла не существует");
 			return false;
 		}
 
 		return true;
 	}
 
-	public String pdfToString(String path) throws FileNotFoundException {
+	public String pdfToString(File file) throws FileNotFoundException {
 		String result = null;
-		File file = new File(path);
+
 		FileInputStream fis = null;
 
 		fis = new FileInputStream(file);
