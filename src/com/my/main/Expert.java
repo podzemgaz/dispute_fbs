@@ -2,6 +2,11 @@ package com.my.main;
 
 import java.util.Map;
 
+import com.my.main.exception.NoAcceptCodeNumException;
+import com.my.main.exception.NoMismatchCodeNumException;
+import com.my.main.exception.NoValuesException;
+import com.my.main.exception.NoWarehouseException;
+
 public class Expert {
 	private String[][] values; // values of parsing of the dispute text
 	private Map<String, Integer> codeNumAccepted; // values of parsing act of accepting pdf
@@ -32,24 +37,24 @@ public class Expert {
 		this.warehouse = warehouse;
 	}
 	
-	public Posting[] getPostings() {
+	public Posting[] getPostings() throws NoValuesException, NoAcceptCodeNumException, NoMismatchCodeNumException, NoWarehouseException {
 		
 		// if values == null it needs to make a request
 		
 		if (values == null) {
-			return null;
+			throw new NoValuesException();
 		}
 		
 		if (codeNumAccepted == null) {
-			return null;
+			throw new NoAcceptCodeNumException();
 		}
 		
 		if (codeNumMismatch == null) {
-			return null;
+			throw new NoMismatchCodeNumException();
 		}
 		
 		if (warehouse == null || warehouse.isEmpty()) {
-			return null;
+			throw new NoWarehouseException();
 		}
 		
 		Posting[] postings = new Posting[values.length];
