@@ -3,6 +3,14 @@ package com.my.main;
 import com.my.main.exception.TextParseEcxeption;
 
 public class DisputeTextParser {
+	
+	String[][] values;
+	
+	
+
+	public String[][] getValues() {
+		return values;
+	}
 
 	// getting an array of individual text snippet, each contains its order
 	public String[] getPostingDonuts(String dispute) {
@@ -34,7 +42,7 @@ public class DisputeTextParser {
 		return line.split(": ")[1];
 	}
 	
-	public String[][] getPostingValues(String dispute) throws TextParseEcxeption {
+	private String[][] getPostingValues(String dispute) throws TextParseEcxeption {
 		String[] donuts = getPostingDonuts(dispute);
 		String[][] values = new String[donuts.length][3];
 		String[] split;
@@ -46,5 +54,10 @@ public class DisputeTextParser {
 		}
 		
 		return values;
+	}
+
+	public void parse(String dispute) throws TextParseEcxeption {
+		// TODO Auto-generated method stub
+		values = getPostingValues(dispute);
 	}
 }

@@ -8,7 +8,7 @@ import java.io.IOException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
 
-public class PDFWorker {
+public class PDFReader {
 
 	public String pdfToString(String path) throws FileNotFoundException {
 		String result = null;

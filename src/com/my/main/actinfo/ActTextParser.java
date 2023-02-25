@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.my.main.PDFWorker;
+import com.my.main.PDFReader;
 
 public class ActTextParser {
 
