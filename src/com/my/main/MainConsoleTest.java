@@ -50,9 +50,9 @@ public class MainConsoleTest {
 			}
 
 			if (acttp.getActType() == ActType.ACCEPT) {
-				expert.setCodeNumAccepted(acttp.getCodeNum());
+				expert.setCodeNumAccepted(acttp.getCodeNumAccept());
 			} else if (acttp.getActType() == ActType.MISMATCH) {
-				expert.setCodeNumMismatch(acttp.getCodeNum());
+				expert.setCodeNumMismatch(acttp.getCodeNumMismatch());
 			} else {
 				continue;
 			}

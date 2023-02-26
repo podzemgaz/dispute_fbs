@@ -17,7 +17,8 @@ public class ActTextParser {
 	private String path;
 	private String warehouse;
 	private ActType type;
-	private Map<String, Integer> codeNum;
+	private Map<String, Integer> codeNumAccept;
+	private Map<String, Integer> codeNumMismatch;
 
 	public ActTextParser(Consoler cnslr) {
 		this.cnslr = cnslr;
@@ -32,8 +33,11 @@ public class ActTextParser {
 	}
 	
 	
-	public Map<String, Integer> getCodeNum() {
-		return codeNum;
+	public Map<String, Integer> getCodeNumAccept() {
+		return codeNumAccept;
+	}
+	public Map<String, Integer> getCodeNumMismatch() {
+		return codeNumMismatch;
 	}
 	
 	public ActType getActType() {
@@ -61,7 +65,7 @@ public class ActTextParser {
 			warehouse = getWarehouseFromAct(textAct);
 		}
 
-		codeNum = new HashMap<>();
+		Map<String, Integer> codeNum = new HashMap<>();
 		Pattern p = Pattern.compile("\\d+ (.*)?\\d+-\\d+-\\d");
 		Matcher m = p.matcher(textAct);
 
@@ -74,6 +78,12 @@ public class ActTextParser {
 			line = line.replaceAll(" +", " ");
 			split = line.split(" ");
 			codeNum.put(split[1], Integer.parseInt(split[0]));
+		}
+		
+		if (type == ActType.ACCEPT) {
+			codeNumAccept = codeNum;
+		} else if (type == ActType.MISMATCH) {
+			codeNumMismatch = codeNum;
 		}
 
 	}
