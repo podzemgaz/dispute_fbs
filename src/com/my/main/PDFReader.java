@@ -12,23 +12,23 @@ import org.apache.pdfbox.util.PDFTextStripper;
 import com.my.main.actinfo.ActTextParser;
 
 public class PDFReader {
-	private Consoler cnsler;
+	private MyPrinter printer;
 
-	public PDFReader(Consoler cnsler) {
-		this.cnsler = cnsler;
+	public PDFReader(MyPrinter printer) {
+		this.printer = printer;
 	}
 
 	public boolean checkPath(String path) {
 
 		if (!path.endsWith(".pdf")) {
-			cnsler.printLnErrLB("Неверный формат файла, должен быть pdf");
+			printer.printLnErrLB("Неверный формат файла, должен быть pdf");
 			return false;
 		}
 
 		File file = new File(path);
 
 		if (!file.exists()) {
-			cnsler.printLnErrLB("Файла не существует");
+			printer.printLnErrLB("Файла не существует");
 			return false;
 		}
 

@@ -8,20 +8,21 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.my.main.Consoler;
+import com.my.main.ScannerWrapper;
+import com.my.main.MyPrinter;
 import com.my.main.PDFReader;
 
 public class ActTextParser {
 
-	private Consoler cnslr;
+	private MyPrinter printer;
 	private String path;
 	private String warehouse;
 	private ActType type;
 	private Map<String, Integer> codeNumAccept;
 	private Map<String, Integer> codeNumMismatch;
 
-	public ActTextParser(Consoler cnslr) {
-		this.cnslr = cnslr;
+	public ActTextParser(MyPrinter printer) {
+		this.printer = printer;
 	}
 
 	public void setWarehouse(String warehouse) {
@@ -31,24 +32,24 @@ public class ActTextParser {
 	public String getWarehouse() {
 		return warehouse;
 	}
-	
-	
+
 	public Map<String, Integer> getCodeNumAccept() {
 		return codeNumAccept;
 	}
+
 	public Map<String, Integer> getCodeNumMismatch() {
 		return codeNumMismatch;
 	}
-	
+
 	public ActType getActType() {
 		return type;
 	}
 
 	public void testParse(File pdfFile) throws FileNotFoundException {
-		
+
 		path = pdfFile.getAbsolutePath();
 
-		PDFReader reader = new PDFReader(cnslr);
+		PDFReader reader = new PDFReader(printer);
 
 		String textAct = reader.pdfToString(pdfFile);
 
@@ -79,7 +80,7 @@ public class ActTextParser {
 			split = line.split(" ");
 			codeNum.put(split[1], Integer.parseInt(split[0]));
 		}
-		
+
 		if (type == ActType.ACCEPT) {
 			codeNumAccept = codeNum;
 		} else if (type == ActType.MISMATCH) {
@@ -102,9 +103,9 @@ public class ActTextParser {
 
 		return result;
 	}
-	
+
 	public void print() {
-		cnslr.printLnLB("Путь к файлу: " + path);
-		cnslr.printLnLB("Тип акта: " + type.getName());
+		printer.printLnLB("Путь к файлу: " + path);
+		printer.printLnLB("Тип акта: " + type.getName());
 	}
 }

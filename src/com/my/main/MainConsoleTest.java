@@ -10,17 +10,18 @@ public class MainConsoleTest {
 	public Posting[] getPostingsByConsole() {
 		System.out.println("Welcome!");
 
-		Consoler cnsler = new Consoler();
+		ScannerWrapper cnsler = new ScannerWrapper(System.in);
+		MyPrinter printer = new MyPrinter();
 
 		Expert expert = new Expert();
 		DisputeTextParser dtp = new DisputeTextParser();
-		ActTextParser acttp = new ActTextParser(cnsler);
+		ActTextParser acttp = new ActTextParser(printer);
 
 		File pdfFile;
 
 		// check values
 		while (expert.getValues() == null) {
-			cnsler.printLnLB("Enter dispute text: ");
+			printer.printLnLB("Enter dispute text: ");
 			String dispute = cnsler.getTextWithinBrackets();
 			try {
 				dtp.parse(dispute);
@@ -37,7 +38,7 @@ public class MainConsoleTest {
 			String path = cnsler.getLine();
 			// check path
 			if (!path.endsWith(".pdf")) {
-				cnsler.printLnErrLB("Неверный формат файла, должен быть pdf");
+				printer.printLnErrLB("Неверный формат файла, должен быть pdf");
 				continue;
 			}
 
@@ -65,7 +66,7 @@ public class MainConsoleTest {
 		expert.setWarehouse(acttp.getWarehouse());
 
 		while (expert.getWarehouse() == null || expert.getWarehouse().isEmpty()) {
-			cnsler.printLnLB("Enter warehouse: ");
+			printer.printLnLB("Enter warehouse: ");
 			expert.setWarehouse(cnsler.getLine());
 		}
 
