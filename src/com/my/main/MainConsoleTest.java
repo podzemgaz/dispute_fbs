@@ -15,7 +15,7 @@ public class MainConsoleTest {
 
 		Expert expert = new Expert();
 		DisputeTextParser dtp = new DisputeTextParser();
-		ActTextParser acttp = new ActTextParser(printer);
+		ActTextParser acttp = new ActTextParser();
 
 		File pdfFile;
 
@@ -61,7 +61,7 @@ public class MainConsoleTest {
 			acttp.print();
 
 		}
-		
+
 		// check warehouse
 		expert.setWarehouse(acttp.getWarehouse());
 
@@ -73,7 +73,7 @@ public class MainConsoleTest {
 		Posting[] postings = expert.getPostings();
 
 		cnsler.close();
-		
+
 		return postings;
 	}
 }

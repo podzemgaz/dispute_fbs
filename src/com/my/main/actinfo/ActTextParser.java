@@ -3,12 +3,9 @@ package com.my.main.actinfo;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.my.main.ScannerWrapper;
 import com.my.main.MyPrinter;
 import com.my.main.PDFReader;
 
@@ -21,8 +18,8 @@ public class ActTextParser {
 	private Map<String, Integer> codeNumAccept;
 	private Map<String, Integer> codeNumMismatch;
 
-	public ActTextParser(MyPrinter printer) {
-		this.printer = printer;
+	public ActTextParser() {
+		this.printer = new MyPrinter();
 	}
 
 	public void setWarehouse(String warehouse) {
@@ -67,7 +64,7 @@ public class ActTextParser {
 		}
 
 		Map<String, Integer> codeNum = new HashMap<>();
-		Pattern p = Pattern.compile("\\d+ (.*)?\\d+-\\d+-\\d");
+		Pattern p = Pattern.compile("\\d+ (.*)?\\d+-\\d+-\\d+");
 		Matcher m = p.matcher(textAct);
 
 		String line;
@@ -107,5 +104,9 @@ public class ActTextParser {
 	public void print() {
 		printer.printLnLB("Путь к файлу: " + path);
 		printer.printLnLB("Тип акта: " + type.getName());
+	}
+
+	public boolean isNotCompleteMaps() {
+		return codeNumAccept == null || codeNumMismatch == null;
 	}
 }

@@ -1,8 +1,6 @@
 package com.my.main;
 
-import java.util.Date;
-
-public class Posting {
+public class Posting implements Comparable<Posting> {
 	private String code;
 	private String sum;
 	private String date;
@@ -11,7 +9,17 @@ public class Posting {
 	private int numMistch;
 	private String warehouse;
 	
-	public Posting () {
+	
+
+	public Status getStatus() {
+		return status;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public Posting() {
 		this.status = Status.ARBITRAGE;
 	}
 
@@ -65,18 +73,10 @@ public class Posting {
 		sb.append(System.lineSeparator()).append("Склад: ").append(warehouse);
 		return sb.toString();
 	}
-	
-	public void setDeliveries(String deliveries, Posting[] postings) {
-		for (int i = 0; i < postings.length; i++) {
-			if (deliveries.contains(postings[i].code)) {
-				postings[i].status = Status.DELIVERED;			}
-		}
-	}
-	
-	public void setCanceled(String canceled, Posting[] postings) {
-		for (int i = 0; i < postings.length; i++) {
-			if (canceled.contains(postings[i].code)) {
-				postings[i].status = Status.CANCELED;			}
-		}
+
+	@Override
+	public int compareTo(Posting o) {
+		// TODO Auto-generated method stub
+		return this.status.compareTo(o.status);
 	}
 }
