@@ -73,4 +73,10 @@ public class Posting {
 		}
 	}
 	
+	public void setCanceled(String canceled, Posting[] postings) {
+		for (int i = 0; i < postings.length; i++) {
+			if (canceled.contains(postings[i].code)) {
+				postings[i].status = Status.CANCELED;			}
+		}
+	}
 }
