@@ -84,6 +84,7 @@ public class MainConsole {
 
 		// set warehouse if doesnt exist
 		if (acttp.getWarehouse() == null || acttp.getWarehouse().isEmpty()) {
+			System.out.println("Ведите название склада: ");
 			acttp.setWarehouse(scw.getLine());
 		}
 
