@@ -89,7 +89,7 @@ public class ActTextParser {
 	public String getWarehouseFromAct(String actText) {
 		String result = "";
 
-		Pattern p = Pattern.compile("([А-Я0-9])+_([А-Я0-9])+(_([а-яА-Я0-9])+(_[а-яА-Я0-9]+)?\\\\r?\\\\n[а-яА-Я0-9]+)?");
+		Pattern p = Pattern.compile("[А-Я0-9]+_[а-яА-Я0-9]+(_[а-яА-Я0-9]+)?(_[а-яА-Я0-9]+(\\r?\\n[а-яА-Я0-9]+)?)?");
 		Matcher m = p.matcher(actText);
 
 		if (m.find()) {
