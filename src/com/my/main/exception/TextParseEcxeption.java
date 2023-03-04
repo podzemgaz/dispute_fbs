@@ -1,9 +1,9 @@
 package com.my.main.exception;
 
-public class TextParseEcxeption extends Exception {
+public class TextParseEcxeption extends AppException {
 
 	/**
-	 * my exception
+	 * Test parser exception
 	 */
 	
 	private static final long serialVersionUID = -6595833446574693309L;
