@@ -32,7 +32,7 @@ public class DisputeTextParser {
 		String[] split = donut.split("\r?\n");
 		
 		if (split.length != 3) {
-			throw new TextParseEcxeption("Check out: " + split[0]);
+			throw new TextParseEcxeption("Ошибка в тектсе в строке: " + split[0]);
 		}
 		
 		return split;
