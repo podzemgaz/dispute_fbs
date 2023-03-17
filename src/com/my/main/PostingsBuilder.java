@@ -15,6 +15,8 @@ public class PostingsBuilder {
 			p.setCode(code);
 			p.setSum(values[i][1]);
 			p.setDate(values[i][2]);
+			System.out.println(acttp.getCodeNumAccept());
+			System.out.println(acttp.getCodeNumMismatch());
 			p.setNumAct(acttp.getCodeNumAccept().get(code));
 			p.setNumMistch(acttp.getCodeNumMismatch().get(code));
 			p.setWarehouse(acttp.getWarehouse());

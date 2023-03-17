@@ -2,6 +2,7 @@ package com.my.main.actinfo;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -49,7 +50,7 @@ public class ActTextParser {
 		PDFReader reader = new PDFReader(printer);
 
 		String textAct = reader.pdfToString(pdfFile);
-
+		
 		String lowText = textAct.toLowerCase();
 		if (lowText.contains("акт приема-передачи")) {
 			type = ActType.ACCEPT;
@@ -64,7 +65,7 @@ public class ActTextParser {
 		}
 
 		Map<String, Integer> codeNum = new HashMap<>();
-		Pattern p = Pattern.compile("\\d+ (.*)?\\d+-\\d+-\\d+");
+		Pattern p = Pattern.compile("\\d\\s+.*?\\d+-\\d+-\\d+");
 		Matcher m = p.matcher(textAct);
 
 		String line;
@@ -77,6 +78,7 @@ public class ActTextParser {
 			split = line.split(" ");
 			codeNum.put(split[1], Integer.parseInt(split[0]));
 		}
+		
 
 		if (type == ActType.ACCEPT) {
 			codeNumAccept = codeNum;
